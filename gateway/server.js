@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const appRouter = require('./lib/app-router');
 
+var logger = require("./lib/logger");
+
 
 const server = express();
 
@@ -18,10 +20,10 @@ const serverPort = process.env.PORT || null;
 const config = require('./config')(env, serverPort);
 
 // LOGGER
-server.use(morgan('combined'));
+server.use(morgan('combined',{ "stream": logger.stream }));
 
 // DB SETUP
-const mongoose = require('./lib/app-db')(config);
+const mongoose = require('./lib/db')(config);
 
 
 
@@ -31,9 +33,9 @@ server.use(config.siteRoot, appRouter(config));
 
 server.listen(config.serverPort, function(error) {
     if (error) {
-        console.error(error);
+        logger.error(error);
     } else {
-        console.info("==> Listening on port %s in %s mode", config.serverPort, env);
+        logger.info("==> Listening on port %s in %s mode", config.serverPort, env);
     }
 });
 
