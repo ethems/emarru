@@ -8,7 +8,7 @@ var logger = require("./lib/logger");
 const server = express();
 
 // ENVIRONMENT
-const environmentTypes = ['production', 'development'];
+const environmentTypes = ['production', 'development', 'test'];
 const envArg = process.argv && process.argv[process.argv.length - 1];
 const env = ~environmentTypes.indexOf(envArg) && envArg || 'development';
 process.env.NODE_ENV = env;

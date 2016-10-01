@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node_modules/.bin/mocha -w",
     "start": "node index.js"
   },
   "author": "EthemSuphi",
@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.14.0",
+    "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.3",
@@ -24,6 +25,8 @@
     "mongoose": "^4.6.1",
     "morgan": "^1.7.0",
     "node-uuid": "^1.4.7",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "sanitize-html": "^1.13.0",
     "validator": "^5.7.0",
     "winston": "^2.2.0"
@@ -38,12 +41,14 @@
     "file-loader": "^0.9.0",
     "jquery": "^3.1.1",
     "material-design-icons": "^3.0.1",
-    "mocha": "^3.0.2",
+    "mocha": "^3.1.0",
     "nock": "^8.0.0",
     "node-sass": "^3.10.0",
     "sass-loader": "^4.0.2",
     "script-loader": "^0.7.0",
+    "should": "^11.1.0",
     "style-loader": "^0.13.1",
+    "supertest": "^2.0.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2"
   }

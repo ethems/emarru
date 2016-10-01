@@ -16,7 +16,7 @@ module.exports = (env, serverPort) => {
 
     runtimeConfig.serverPort = serverPort || configJson['Application.ServerPort'] || 3000;
     runtimeConfig.siteRoot = `/${configJson['Application.SiteRoot']}`;
-    runtimeConfig.dbUri= configJson['Application.DBUri'];
+    runtimeConfig.dbUri= configJson['db'][env];
 
     return runtimeConfig;
 
