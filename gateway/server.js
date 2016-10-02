@@ -11,7 +11,7 @@ const server = express();
 const environmentTypes = ['production', 'development', 'test'];
 const envArg = process.argv && process.argv[process.argv.length - 1];
 const env = ~environmentTypes.indexOf(envArg) && envArg || 'development';
-process.env.NODE_ENV = env;
+process.env.NODE_ENV = process.env.NODE_ENV || env;
 
 // INJECTED PORT
 const serverPort = process.env.PORT || null;

@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+
 
 const bindApiIndex= require('../api');
 
@@ -7,9 +9,11 @@ const apiRouter = express.Router();
 
 module.exports = config => {
 
+
     // BODY PARSER
     apiRouter.use(bodyParser.urlencoded({extended: true}));
     apiRouter.use(bodyParser.json());
+    apiRouter.use(expressValidator());
 
     // BIND ALL API CONTROLLERS
     bindApiIndex(apiRouter);

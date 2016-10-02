@@ -1,9 +1,9 @@
 const Mongoose= require('mongoose');
-
 var logger = require("./logger");
 
 
 module.exports = config => {
+  Mongoose.Promise=require('bluebird');
   Mongoose.connect(config.dbUri);
 
   Mongoose.connection.on('error', error=>{
