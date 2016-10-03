@@ -18,6 +18,7 @@ var logger = new winston.Logger({
             level: 'info',
             filename: filePath,
             handleExceptions: true,
+            humanReadableUnhandledException: true,
             json: true,
             maxsize: 5242880, //5MB
             maxFiles: 5,
@@ -26,6 +27,7 @@ var logger = new winston.Logger({
         new winston.transports.Console({
             level: 'debug',
             handleExceptions: true,
+            humanReadableUnhandledException: true,
             json: false,
             colorize: true
         })

@@ -11,6 +11,10 @@ describe('Users: models', function() {
         it('should create a new User', function(done) {
             // Create a User object to pass to User.create()
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "mesut@gmail.com",
                 passwordHash: "123456"
             };
@@ -28,6 +32,10 @@ describe('Users: models', function() {
         it('should create a new User with lowercase email if email is capitilized', function(done) {
             // Create a User object to pass to User.create()
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "MeSut2@GmAIl.Com",
                 passwordHash: "123456"
             };
@@ -41,6 +49,10 @@ describe('Users: models', function() {
 
         it('should throw exception if there is no email', function(done) {
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "",
                 password: "123456"
             };
@@ -54,6 +66,10 @@ describe('Users: models', function() {
 
         it('should throw exception if there is no password', function(done) {
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "mesut5@gmail.com",
                 password: ""
             };
@@ -65,10 +81,62 @@ describe('Users: models', function() {
             });
         });
 
+        it('should throw exception  if there is noncomplete address ', function(done) {
+            // Create a User object to pass to User.create()
+            var a={
+              streetLine1:"xxxxxx"
+            }
+            var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
+                addresses:[a],
+                email: "mesut6@gmail.com",
+                passwordHash: "123456"
+            };
+            User.create(u, function(err, createdUser) {
+
+                should.exist(err);
+
+                done();
+            });
+        });
+
+        it('should create a new user with address ', function(done) {
+            // Create a User object to pass to User.create()
+            var a={
+              streetLine1:"st1",
+              city:"c1",
+              zip:"z1"
+            }
+            var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
+                addresses:[a],
+                email: "mesut7@gmail.com",
+                passwordHash: "123456"
+            };
+            User.create(u, function(err, createdUser) {
+
+                should.not.exist(err);
+                createdUser.addresses[0].streetLine1.should.equal('st1');
+                createdUser.addresses[0].city.should.equal('c1');
+                createdUser.addresses[0].zip.should.equal('z1');
+                done();
+            });
+        });
+
     });
     describe('#Find', function() {
         it('should find a existed User', function(done) {
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "mesut3@gmail.com",
                 passwordHash: "123456"
             };
@@ -88,6 +156,10 @@ describe('Users: models', function() {
         it('should update a existed User', function(done) {
 
             var u = {
+                name: {
+                    firstName: "Mesut",
+                    lastName: "Yazar"
+                },
                 email: "mesut4@gmail.com",
                 passwordHash: "123456"
             };
