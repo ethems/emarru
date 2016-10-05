@@ -19,7 +19,7 @@ before(function(done) {
     }
 
     function reconnect() {
-        mongoose.connect(config.db.test, function(err) {
+        mongoose.connect(config.DB.test, function(err) {
             if (err) {
                 throw err;
             }

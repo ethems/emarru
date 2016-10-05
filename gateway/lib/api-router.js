@@ -16,7 +16,7 @@ module.exports = config => {
     apiRouter.use(expressValidator());
 
     // BIND ALL API CONTROLLERS
-    bindApiIndex(apiRouter);
+    bindApiIndex(apiRouter,config);
 
     // WHATEVER ROUTES DON'T MATCH THROW 404
     apiRouter.use('/*', (req, res, next) => {
