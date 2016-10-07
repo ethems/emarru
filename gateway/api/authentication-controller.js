@@ -5,15 +5,15 @@ const jwt = require('jwt-simple');
 
 const logger = require("../lib/logger");
 
-const requireSignin = passport.authenticate('local',{session:false});
+const requireSignin = passport.authenticate('local', {session: false});
 
-const createToken=(user,config)=>{
-  const timeStamp = Date.now();
-  return jwt.encode({
-      sub: user.id,
-      iat: timeStamp
-  }, config.secret);
-}
+const createToken = (user, config) => {
+    const timeStamp = Date.now();
+    return jwt.encode({
+        sub: user.id,
+        iat: timeStamp
+    }, config.secret);
+};
 
 const AuthenticationController = (apiRouter, config) => {
 
@@ -37,10 +37,7 @@ const AuthenticationController = (apiRouter, config) => {
             email: req.body.email
         };
 
-
-        User.findOne({
-            email: req.body.email.toLowerCase()
-        }, function(err, existingUser) {
+        User.findOneByEmail(req.body.email, function(err, existingUser) {
             if (err) {
                 logger.error('error : ' + err.message);
                 res.status(500).json({error: "Opppssss !!! There is an internal server error!"});
@@ -60,7 +57,10 @@ const AuthenticationController = (apiRouter, config) => {
                             res.status(500).json({error: "Opppssss !!! There is a problem when creating a new user!"});
                         }
                         logger.info('new user created  : ' + createdUser.email);
-                        res.json({user: createdUser, token: createToken(createdUser,config)});
+                        res.json({
+                            user: createdUser,
+                            token: createToken(createdUser, config)
+                        });
                     });
                 });
 
@@ -69,8 +69,11 @@ const AuthenticationController = (apiRouter, config) => {
         });
 
     });
-    apiRouter.post('/signin',requireSignin, function(req,res){
-      res.json({user: req.user, token:createToken(req.user,config)});
+    apiRouter.post('/signin', requireSignin, function(req, res) {
+        res.json({
+            user: req.user,
+            token: createToken(req.user, config)
+        });
     });
 
 }

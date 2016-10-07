@@ -10,9 +10,7 @@ module.exports = config => {
         usernameField: 'email'
     };
     const localLogin = new LocalStrategy(localOptions, function(email, password, done) {
-        User.findOne({
-            email: email.toLowerCase()
-        }, function(err, user) {
+        User.findOneByEmail(email, function(err, user) {
             if (err) {
                 return done(err);
             }
@@ -32,6 +30,25 @@ module.exports = config => {
         });
     });
 
+    //**************************************
+    const jwtOptions = {
+      jwtFromRequest:ExtractJWT.fromHeader('authorization'),
+      secretOrKey:config.secret
+    };
+    const jwtLogin = new JWTStrategy(jwtOptions, function(payload, done) {
+        User.findById(payload.sub, function(err, user) {
+            if (err) {
+                done(err, false);
+            }
+            if (user) {
+                done(null, user);
+            } else {
+                done(null, false);
+            }
+        });
+    });
+
     passport.use(localLogin);
+    passport.use(jwtLogin);
 
 };
