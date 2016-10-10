@@ -5,9 +5,8 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const addressSchema = require('./address').Schema;
-// Constants
-var BCRYPT_COST = 12;
-//...
+const  BCRYPT_COST = 12;
+
 
 const userSchema = new Schema({
     name: {
