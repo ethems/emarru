@@ -76,7 +76,8 @@ describe('Products: models', function() {
 
         it('should add new price to productHistory', function(done) {
             var p = {
-                name: "Domates biber patlican sogan 2"
+                name: "Domates biber patlican sogan 2",
+                priceHistory:[]
             };
             Product.create(p, function(err, createdProduct) {
                 Product.updatePrice(createdProduct._id, {

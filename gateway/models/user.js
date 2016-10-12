@@ -41,7 +41,7 @@ const userSchema = new Schema({
         work: String
     },
     addresses: [addressSchema],
-    isAdmin: {
+    admin: {
         type: Boolean,
         default: false
     },

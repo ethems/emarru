@@ -12,9 +12,23 @@ const productSchema = new Schema({
         set: capitalize,
         unique: true
     },
-    priceHistory: [Price]
+    priceHistory: [Price],
+    createdDate: {
+        type: Date,
+        default: moment.utc()
+    },
+    active:{
+      type: Boolean,
+      default: true
+    },
+    modifiedDate: Date
 });
 
+productSchema.pre('save', function(next) {
+    const user = this;
+    user.modifiedDate = moment.utc();
+    next();
+});
 productSchema.statics.expireActivePrice = function(productId, fn) {
     this.update({
         _id: productId,
