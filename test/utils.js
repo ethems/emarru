@@ -15,6 +15,27 @@ before(function(done) {
         for (var i in mongoose.connection.collections) {
             mongoose.connection.collections[i].remove();
         }
+        mongoose.connection.collections.users.insert({
+            email: 'admin@admin.com',
+            passwordHash: '$2a$12$4XZmaQHV5o0chUjqGHssk.8IlAkzzUAgIH1ZqaV/M0lyS1GXfmq8y',
+            admin: true,
+            name: {
+                firstName: "admin",
+                lastName: "admin"
+            }
+        });
+        mongoose.connection.collections.users.insert({
+            email: 'enduser@enduser.com',
+            passwordHash: '$2a$12$R0f2g0lcVfSlzlopePL6He3l7zFwWn0Cet0lxc0rQh3Oa5bVMVXTG',
+            admin: false,
+            name: {
+                firstName: "enduser",
+                lastName: "enduser"
+            }
+        });
+        mongoose.connection.collections.products.insert({
+          name:"Avokado"
+        });
         return done();
     }
 

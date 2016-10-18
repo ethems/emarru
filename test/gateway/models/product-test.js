@@ -1,10 +1,10 @@
 'use strict';
 
-// import the moongoose helper utilities
 var utils = require('../../utils');
 var should = require('should');
-// import our User mongoose model
 var Product = require('../../../gateway/models/product');
+var Price = require('../../../gateway/models/price');
+
 
 describe('Products: models', function() {
     describe('#Create', function() {
@@ -33,44 +33,70 @@ describe('Products: models', function() {
         it('should create a new Product with price', function(done) {
             var p = {
                 name: "Domates biber patlican",
-                priceHistory: [
-                    {
-                        price: 10.34
-                    }
-                ]
             };
             Product.create(p, function(err, createdProduct) {
-                should.not.exist(err);
-                createdProduct.name.should.equal('Domates Biber Patlican');
-                createdProduct.priceHistory[0].price.should.equal(10.34);
+                Product.updatePrice(createdProduct._id,{price:10.34},function(err,newProduct){
+                  should.not.exist(err);
+                  newProduct.name.should.equal('Domates Biber Patlican');
+                  newProduct.priceHistory.length.should.equal(1);
+                  newProduct.priceHistory[0].price.should.equal(10.34);
 
-                done();
+                  done();
+                })
             });
         });
 
     });
-    describe('#Find', function() {});
+    describe('#Find', function() {
+      it('should filter productHistory by date', function(done) {
+        var p = {
+            name: "Biber Domates Patlican",
+        };
+            Product.create(p,function(err,createdProduct){
+              should.not.exist(err);
+              should.exist(createdProduct);
+              Product.updatePrice(createdProduct.id,{price:30.34,startDate:new Date(1999,1,1)},function(err,updatedProduct){
+                should.not.exist(err);
+                Product.updatePrice(createdProduct.id,{price:30.30,startDate:new Date(2001,1,1)},function(err,updatedProduct){
+                  should.not.exist(err);
+                  Product.updatePrice(createdProduct.id,{price:30.28,startDate:new Date(2015,1,1)},function(err,updatedProduct){
+                    should.not.exist(err);
+                    Product.updatePrice(createdProduct.id,{price:30.35,startDate:new Date(2017,1,1)},function(err,updatedProduct){
+                      should.not.exist(err);
+                      Product.getWithAllPricesAfter(createdProduct.id,new Date(),function(err,foundProduct){
+                        foundProduct.priceHistory[0].price.should.equal(30.35);
+                        foundProduct.priceHistory.length.should.equal(1);
+                        done();
+                      })
+                    })
+                  })
+                })
+              })
+            })
+      });
+
+    });
     describe("#Update", function() {
         it('should update productHistory', function(done) {
-            var p = {
-                name: "Domates biber patlican sogan",
-                priceHistory: [
-                    {
-                        price: 10.34
-                    }, {
-                        price: 10.31
-                    }, {
-                        price: 10.30
-                    }
-                ]
-            };
-            Product.create(p, function(err, createdProduct) {
-                Product.updatePrice(createdProduct._id, {
-                    price: 10.35
-                }, function(err, doc) {
+
+            Product.findByName('avokado',function(err,foundProduct){
+              should.not.exist(err);
+              should.exist(foundProduct);
+              Product.updatePrice(foundProduct.id,{price:30.34},function(err,updatedProduct){
+                should.not.exist(err);
+                Product.updatePrice(foundProduct.id,{price:30.30},function(err,updatedProduct){
+                  should.not.exist(err);
+                  Product.updatePrice(foundProduct.id,{price:30.28},function(err,updatedProduct){
                     should.not.exist(err);
-                    done();
+                    Product.updatePrice(foundProduct.id,{price:30.35},function(err,updatedProduct){
+                      should.not.exist(err);
+                      updatedProduct.priceHistory[0].price.should.equal(30.35);
+                      updatedProduct.priceHistory.length.should.equal(1);
+                      done();
+                    })
+                  })
                 })
+              })
             });
         });
 
@@ -84,6 +110,7 @@ describe('Products: models', function() {
                     price: 10.35
                 }, function(err, updatedProduct) {
                     should.not.exist(err);
+                    updatedProduct.priceHistory.length.should.equal(1);
                     updatedProduct.priceHistory[0].price.should.equal(10.35);
                     done();
                 })

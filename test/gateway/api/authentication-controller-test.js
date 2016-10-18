@@ -22,7 +22,7 @@ describe('Authentication Controller', function() {
                     lastName: "ll"
                 },
                 email: "ff@lll.com",
-                password: "123456"
+                password: "enduser"
             };
             request.post('/api/signup').send(u).expect(200).end(function(err, res) {
                 should.not.exist(err);
@@ -39,7 +39,7 @@ describe('Authentication Controller', function() {
         it('should get 200 if complete model is sent', function(done) {
             var u = {
                 email: "ff@lll.com",
-                password: "123456"
+                password: "enduser"
             };
             request.post('/api/signin').send(u).expect(200).end(function(err, res) {
                 should.not.exist(err);

@@ -17,25 +17,21 @@ describe('User Controller', function() {
 
         it('should get 200 code and user if there is correct token', function(done) {
             var u = {
-                name: {
-                    firstName: "ff",
-                    lastName: "ll"
-                },
-                email: "user_1@lll.com",
-                password: "123456"
+                email: "enduser@enduser.com",
+                password: "enduser"
             };
-            request.post('/api/signup').send(u).end(function(err, res) {
+            request.post('/api/signin').send(u).end(function(err, res) {
                 var updatedU = Object.assign({}, u, {
                     name: {
-                        firstName: "ff_update",
+                        firstName: "enduser_updated",
                         lastName: "ll"
                     },
                     addresses:[]
                 });
                 request.put('/api/user').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
                     should.not.exist(err);
-                    res.body.user.email.should.equal('user_1@lll.com');
-                    res.body.user.name.firstName.should.equal('Ff_update');
+                    res.body.user.email.should.equal('enduser@enduser.com');
+                    res.body.user.name.firstName.should.equal('Enduser_updated');
                     done();
                 });
             });
@@ -45,14 +41,10 @@ describe('User Controller', function() {
 
         it('should get 500 code and user if there is correct token but wrong address', function(done) {
             var u = {
-                name: {
-                    firstName: "ff",
-                    lastName: "ll"
-                },
-                email: "user_2@lll.com",
-                password: "123456"
+              email: "enduser@enduser.com",
+              password: "enduser"
             };
-            request.post('/api/signup').send(u).end(function(err, res) {
+            request.post('/api/signin').send(u).end(function(err, res) {
                 var updatedU = Object.assign({}, u, {
                     name: {
                         firstName: "ff_update",
@@ -74,18 +66,14 @@ describe('User Controller', function() {
 
         it('should get 200 code and user if there is correct token and  correct address', function(done) {
             var u = {
-                name: {
-                    firstName: "ff",
-                    lastName: "ll"
-                },
-                email: "user_3@lll.com",
-                password: "123456"
+              email: "enduser@enduser.com",
+              password: "enduser"
             };
-            request.post('/api/signup').send(u).end(function(err, res) {
+            request.post('/api/signin').send(u).end(function(err, res) {
                 var updatedU = Object.assign({}, u, {
                     name: {
-                        firstName: "ff_update",
-                        lastName: "ll"
+                        firstName: "enduser_updated",
+                        lastName: "enduser_updated"
                     },
                     addresses:[
                       {
@@ -97,7 +85,8 @@ describe('User Controller', function() {
                 });
                 request.put('/api/user').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
                     should.not.exist(err);
-                    res.body.user.email.should.equal('user_3@lll.com');
+                    res.body.user.email.should.equal('enduser@enduser.com');
+                    res.body.user.addresses[0].streetLine1.should.equal('xx');
                     done();
                 });
             });

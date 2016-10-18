@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const Price = new Schema({
+const priceSchema = new Schema({
     price: {
         type: Number,
         required: true
@@ -13,6 +13,11 @@ const Price = new Schema({
     currency: {
         type: String,
         default: 'TRY'
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
     },
     startDate: {
         type: Date,
@@ -25,6 +30,7 @@ const Price = new Schema({
     }
 });
 
-module.exports = {
-    Schema: Price
-};
+
+const PriceModel = mongoose.model('Price', priceSchema);
+
+module.exports = PriceModel;

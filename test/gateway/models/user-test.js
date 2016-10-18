@@ -132,64 +132,35 @@ describe('Users: models', function() {
     });
     describe('#Find', function() {
         it('should find a existed User', function(done) {
-            var u = {
-                name: {
-                    firstName: "Mesut",
-                    lastName: "Yazar"
-                },
-                email: "mesut3@gmail.com",
-                passwordHash: "123456"
-            };
-            User.create(u, function(err, createdUser) {
-                User.findOne({
-                    'email': 'mesut3@gmail.com'
-                }, function(err, foundUser) {
-                    should.not.exist(err);
-                    foundUser.email.should.equal('mesut3@gmail.com');
-                    foundUser.passwordHash.should.equal('123456');
-                    done();
-                });
-            });
+          User.findOne({
+              'email': 'enduser@enduser.com'
+          }, function(err, foundUser) {
+              should.not.exist(err);
+              foundUser.email.should.equal('enduser@enduser.com');
+              done();
+          });
         });
     });
     describe("#Update", function() {
         it('should update a existed User', function(done) {
-
-            var u = {
-                name: {
-                    firstName: "Mesut",
-                    lastName: "Yazar"
-                },
-                email: "mesut4@gmail.com",
-                passwordHash: "123456"
-            };
-            User.create(u, function(err, createdUser) {
-                User.findOne({
-                    'email': 'mesut4@gmail.com'
-                }, function(err, foundUser) {
-                    foundUser.password = '654321';
-                    foundUser.save(function(err) {
-                        should.not.exist(err);
-
-                        foundUser.password.should.equal('654321');
-                        done();
-                    });
-                });
-            });
-
+          User.findOne({
+              'email': 'enduser@enduser.com'
+          }, function(err, foundUser) {
+              foundUser.name.middleName = 'middleName';
+              foundUser.save(function(err) {
+                  should.not.exist(err);
+                  foundUser.name.middleName.should.equal('Middlename');
+                  done();
+              });
+          });
         });
-
     });
 
     describe("#PasswordHashing", function() {
         it('should return a hashed password asynchronously', function(done) {
-
             var password = 'secret';
-
             User.hashPassword(password, function(err, passwordHash) {
-                // Confirm that that an error does not exist
                 should.not.exist(err);
-                // Confirm that the passwordHash is not null
                 should.exist(passwordHash);
                 done();
             });
@@ -199,34 +170,21 @@ describe('Users: models', function() {
 
             var password = 'secret';
 
-            // first we need to create a password hash
             User.hashPassword(password, function(err, passwordHash) {
-                // Confirm that that an error does not exist
                 User.comparePasswordAndHash(password, passwordHash, function(err, areEqual) {
-                    // Confirm that that an error does not exist
                     should.not.exist(err);
-                    // Confirm that the areEqaul is `true`
                     areEqual.should.equal(true);
-                    // notice how we call done() from the final callback
                     done();
                 });
             });
         });
 
         it('should return false if password is invalid', function(done) {
-
             var password = 'secret';
-
-            // first we need to create a password hash
             User.hashPassword(password, function(err, passwordHash) {
-
                 var fakePassword = 'imahacker';
-
-                // Confirm that that an error does not exist
                 User.comparePasswordAndHash(fakePassword, passwordHash, function(err, areEqual) {
-                    // Confirm that that an error does not exist
                     should.not.exist(err);
-                    // Confirm that the are Eqaul is `false`
                     areEqual.should.equal(false);
                     done();
                 });
