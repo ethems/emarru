@@ -21,7 +21,7 @@ const productSchema = new Schema({
     ],
     createdDate: {
         type: Date,
-        default: moment.utc()
+        default: Date.now()
     },
     active: {
         type: Boolean,
@@ -32,7 +32,7 @@ const productSchema = new Schema({
 
 productSchema.pre('save', function(next) {
     const product = this;
-    product.modifiedDate = moment.utc();
+    product.modifiedDate = Date.now();
     next();
 });
 productSchema.statics.findByName=function(productName,fn){
@@ -46,7 +46,7 @@ productSchema.statics.expireActivePrice = function(productId, fn) {
     }, {
         $set: {
             active: false,
-            endDate: moment.utc()
+            endDate: Date.now()
         }
     }, fn);
 };

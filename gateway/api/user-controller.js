@@ -28,10 +28,11 @@ const userController = apiRouter => {
             foundUser.name.lastName = req.body.name.lastName;
             foundUser.name.middleName = req.body.name.middleName;
             foundUser.email = req.body.email;
-            foundUser.addresses= req.body.addresses;
+            foundUser.addresses = req.body.addresses;
 
             foundUser.save(function(err, updatedUser) {
                 if (err) {
+                    logger.error('user updating error : ' + err.message);
                     res.status(500).json({error: "Opppssss !!! There is a problem when updating user!"});
                 }
                 logger.info('user updated  : ' + updatedUser.email);

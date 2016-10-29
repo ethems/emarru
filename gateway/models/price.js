@@ -21,7 +21,7 @@ const priceSchema = new Schema({
     },
     startDate: {
         type: Date,
-        default: moment.utc()
+        default: Date.now()
     },
     endDate: Date,
     active: {

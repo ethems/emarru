@@ -47,7 +47,7 @@ const userSchema = new Schema({
     },
     createdDate: {
         type: Date,
-        default: moment.utc()
+        default: Date.now()
     },
     modifiedDate: Date
 });
@@ -75,7 +75,7 @@ userSchema.statics.findOneByEmail = function(email, fn) {
 
 userSchema.pre('save', function(next) {
     const user = this;
-    user.modifiedDate = moment.utc();
+    user.modifiedDate = Date.now();
     next();
 });
 
