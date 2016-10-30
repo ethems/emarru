@@ -9,25 +9,27 @@ const requireAdmin = require("../lib/admin-middleware");
 const productController = apiRouter => {
 
     apiRouter.put('/product', requireAuth, requireAdmin, function(req, res) {
-
+        // Rightnow just allow changing name
         req.checkBody('name', 'Invalid name').len(1, 50);
 
         const errors = req.validationErrors();
         if (errors) {
+            logger.error('Product validation error');
             res.status(400).json({error: "Validation error !"});
         }
         if (req.body.id) {
             Product.findById(req.body.id, function(err, foundProduct) {
                 if (err) {
-                    logger.error('product search error : ' + err.message);
-                    res.status(500).json({error: "Opppssss !!! There is a problem when searching product!"});
+                    logger.error('Product search error : ' + err.message);
+                    res.status(500).json({error: "Product seach error"});
                 }
                 foundProduct.name = req.body.name;
                 foundProduct.save(function(err, updatedProduct) {
                     if (err) {
-                        res.status(500).json({error: "Opppssss !!! There is a problem when updating product!"});
+                        logger.error('Product update error : ' + err.message);
+                        res.status(500).json({error: "Product update error"});
                     }
-                    logger.info('product updated  : ' + updatedProduct.name);
+                    logger.info('product updated  : ' + JSON.stringify(updatedProduct));
                     res.json({product: updatedProduct});
                 });
             });
@@ -38,9 +40,9 @@ const productController = apiRouter => {
             Product.create(product, function(err, newProduct) {
                 if (err) {
                     logger.error('product create error : ' + err.message);
-                    res.status(500).json({error: "Opppssss !!! There is a problem when creating a product!"});
+                    res.status(500).json({error: "Product create error"});
                 }
-                logger.info('new product created  : ' + newProduct.name);
+                logger.info('new product created  : ' + JSON.stringify(newProduct));
                 res.json({product: newProduct});
             });
         }
@@ -52,6 +54,7 @@ const productController = apiRouter => {
         req.checkBody('price', 'Invalid price').notEmpty().isNumber();
         const errors = req.validationErrors();
         if (errors || !req.params.id) {
+            logger.error('Price validation error');
             res.status(400).json({error: "Validation error !"});
         };
         const newPrice = {
@@ -60,6 +63,7 @@ const productController = apiRouter => {
         Product.updatePrice(req.params.id, newPrice, function(err, updatedProduct) {
             if (err) {
                 logger.error('price update error : ' + err.message);
+                res.status(500).json({error: "Price update error"});
             }
             logger.info('price updated  for ' + updatedProduct.name + ' new price is ' + req.body.price);
             res.json({product: updatedProduct})
@@ -72,35 +76,34 @@ const productController = apiRouter => {
         }
         const productId = req.params.id;
         const timespan = req.params.timespan.toLowerCase();
-
-        const timeSpanTypes={
-          'daily':'days',
-          'weekly':'weeks',
-          'monthly':'months',
-          'yearly':'years'
+        const timeSpanTypes = {
+            'daily': 'day',
+            'weekly': 'week',
+            'monthly': 'month',
+            'yearly': 'year'
         };
-        const previousUTCtime = moment(Date.now()).utc(-1, timeSpanTypes[timespan] || 'days').utc();
+        const sinceTime = moment().startOf(timeSpanTypes[timespan] || 'day');
 
-        Product.getWithAllPricesAfter(productId, previousUTCtime, function(err, foundProduct) {
+        Product.getWithAllPricesSince(productId, sinceTime, function(err, foundProduct) {
             if (err) {
                 logger.error('product find error : ' + err.message);
-                res.status(500).json({error: "Opppssss !!! There is a problem when creating a product!"});
+                res.status(500).json({error: "Product find error"});
             }
             res.json({product: foundProduct});
         });
 
     });
 
-    apiRouter.get('/product',function(req,res){
-      Product.getAllWithActivePrice(function(err,foundProducts){
-        if(err){
-          logger.error('product find error : ' + err.message);
-          res.status(500).json({error: "Opppssss !!! There is a problem when creating a product!"});
-        }
-        res.json({products:foundProducts});
-      })
+    apiRouter.get('/product', function(req, res) {
+        Product.getAllWithActivePrice(function(err, foundProducts) {
+            if (err) {
+                logger.error('products find error : ' + err.message);
+                res.status(500).json({error: "Products find error"});
+            }
+            res.json({products: foundProducts});
+        })
     });
-    
+
 }
 
 module.exports = {
