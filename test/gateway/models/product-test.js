@@ -63,7 +63,7 @@ describe('Products: models', function() {
                     should.not.exist(err);
                     Product.updatePrice(createdProduct.id,{price:30.35,startDate:new Date(2017,1,1)},function(err,updatedProduct){
                       should.not.exist(err);
-                      Product.getWithAllPricesAfter(createdProduct.id,new Date(),function(err,foundProduct){
+                      Product.getWithAllPricesSince(createdProduct.id,new Date(),function(err,foundProduct){
                         foundProduct.priceHistory[0].price.should.equal(30.35);
                         foundProduct.priceHistory.length.should.equal(1);
                         done();

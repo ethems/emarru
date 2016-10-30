@@ -39,6 +39,20 @@ productSchema.statics.findByName=function(productName,fn){
   this.findOne({name:capitalize(productName)},fn);
 };
 
+productSchema.statics.getWithAllPricesSince=function(productId,date,fn){
+  this.findById(productId).populate({path:'priceHistory',match:{
+    $or:[{startDate:{"$gte":date}},{active:true}]
+  }}).exec(fn)
+};
+productSchema.statics.getWithLastNPrices=function(productId,limit,fn){
+  if(!isNaN(limit)){
+    limit=1;
+  }
+  this.findById(productId).populate({path:'priceHistory',options:{limit:+limit,sort: {startDate: -1}}}).exec(fn)
+};
+
+
+
 productSchema.statics.expireActivePrice = function(productId, fn) {
     Price.update({
         productId: productId,
@@ -66,33 +80,23 @@ productSchema.statics.addPriceHistory = function(productId, priceId, fn) {
         }
     }, fn);
 };
-productSchema.statics.getWithAllPricesAfter=function(productId,date,fn){
-  this.findById(productId).populate({path:'priceHistory',match:{
-    $or:[{startDate:{"$gte":date}},{active:true}]
-  }}).exec(fn)
-};
-productSchema.statics.getWithLastNPrices=function(productId,limit,fn){
-  if(!isNaN(limit)){
-    limit=1;
-  }
-  this.findById(productId).populate({path:'priceHistory',options:{limit:+limit,sort: {startDate: -1}}}).exec(fn)
-};
 productSchema.statics.getWithActivePrice=function(productId, fn){
+  //Return selected product with active price
   this.findById(productId).populate({path:'priceHistory',match:{active:true}}).exec(fn)
 }
 productSchema.statics.updatePrice = function(productId, newPrice, fn) {
     const that = this;
-    this.expireActivePrice(productId, function(err) {
+    this.expireActivePrice(productId, function(err,doc, next) {
         if (err) {
-            throw(err);
+            return next(err);
         }
-        that.addNewPrice(productId, newPrice, function(err, price) {
+        that.addNewPrice(productId, newPrice, function(err, price,next) {
             if (err) {
-                throw(err);
+                return next(err);
             }
-            that.addPriceHistory(productId, price.id, function(err) {
+            that.addPriceHistory(productId, price.id, function(err,doc,next) {
                 if (err) {
-                    throw(err);
+                    return next(err);
                 }
                 that.getWithActivePrice(productId,fn);
             })
@@ -102,6 +106,7 @@ productSchema.statics.updatePrice = function(productId, newPrice, fn) {
 
 }
 productSchema.statics.getAllWithActivePrice = function(fn){
+  //Return all products with active price
   this.find().populate({path:'priceHistory',match:{active:true}}).exec(fn);
 }
 
