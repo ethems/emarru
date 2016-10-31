@@ -8,7 +8,7 @@ const requireAdmin = require("../lib/admin-middleware");
 
 const productController = apiRouter => {
 
-    apiRouter.put('/product', requireAuth, requireAdmin, function(req, res) {
+    apiRouter.put('/products', requireAuth, requireAdmin, function(req, res) {
         // Rightnow just allow changing name
         req.checkBody('name', 'Invalid name').len(1, 50);
 
@@ -49,7 +49,7 @@ const productController = apiRouter => {
 
     });
 
-    apiRouter.post('/product/:id/price', requireAuth, requireAdmin, function(req, res) {
+    apiRouter.post('/products/:id/price', requireAuth, requireAdmin, function(req, res) {
 
         req.checkBody('price', 'Invalid price').notEmpty().isNumber();
         const errors = req.validationErrors();
@@ -70,7 +70,7 @@ const productController = apiRouter => {
         });
     });
 
-    apiRouter.get('/product/:id/:timespan', function(req, res) {
+    apiRouter.get('/products/:id/:timespan', function(req, res) {
         if (!req.params.id) {
             res.status(400).json({error: "Validation error !"});
         }
@@ -94,7 +94,7 @@ const productController = apiRouter => {
 
     });
 
-    apiRouter.get('/product', function(req, res) {
+    apiRouter.get('/products', function(req, res) {
         Product.getAllWithActivePrice(function(err, foundProducts) {
             if (err) {
                 logger.error('products find error : ' + err.message);
@@ -103,6 +103,19 @@ const productController = apiRouter => {
             res.json({products: foundProducts});
         })
     });
+
+    apiRouter.get('/products/:id', function(req, res) {
+        if (!req.params.id) {
+            res.status(400).json({error: "Validation error !"});
+        }
+        Product.getWithActivePrice(req.params.id, function(err, foundProduct) {
+            if (err) {
+                logger.error('products find error : ' + err.message);
+                res.status(500).json({error: "Product find error"});
+            }
+            res.json({product: foundProduct});
+        })
+    })
 
 }
 

@@ -34,7 +34,7 @@ describe('Product Controller', function() {
             const p = {
                 name: "1"
             };
-            request.put('/api/product').send(p).set('Accept', 'application/json').expect(401).end(function(err, res) {
+            request.put('/api/products').send(p).set('Accept', 'application/json').expect(401).end(function(err, res) {
                 should.not.exist(err);
                 done();
             });
@@ -43,18 +43,15 @@ describe('Product Controller', function() {
 
     describe('GET', function() {
         it('should get product with correct timespan', function(done) {
-
-            request.get(`/api/product/${mantarID}/days`).set('Accept', 'application/json').expect(200).end(function(err, res) {
+            request.get(`/api/products/${mantarID}/days`).set('Accept', 'application/json').expect(200).end(function(err, res) {
                 should.not.exist(err);
                 res.body.product.priceHistory.length.should.equal(1);
-                  //res.body.user.name.firstName.should.equal('Enduser_updated');
                 done();
             });
         });
 
         it('should get products with active price', function(done) {
-
-            request.get(`/api/product`).set('Accept', 'application/json').expect(200).end(function(err, res) {
+            request.get(`/api/products`).set('Accept', 'application/json').expect(200).end(function(err, res) {
                 should.not.exist(err);
                 res.body.products.length.should.greaterThan(1);
                 var mantar=res.body.products.filter(function(obj){
@@ -62,7 +59,15 @@ describe('Product Controller', function() {
                 })[0];
                 mantar.priceHistory.length.should.equal(1);
                 mantar.priceHistory[0].price.should.equal(30.35);
-                  //res.body.user.name.firstName.should.equal('Enduser_updated');
+                done();
+            });
+        });
+        it('should get product with active price', function(done) {
+            request.get(`/api/products/${mantarID}`).set('Accept', 'application/json').expect(200).end(function(err, res) {
+                should.not.exist(err);
+                var mantar=res.body.product;
+                mantar.priceHistory.length.should.equal(1);
+                mantar.priceHistory[0].price.should.equal(30.35);
                 done();
             });
         });

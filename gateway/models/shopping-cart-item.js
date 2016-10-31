@@ -11,6 +11,7 @@ const shoppingCartItemSchema = new Schema({
     },
     quantity: {
         type: Number,
+        default: '1'
     },
     createdDate: {
         type: Date,
@@ -19,3 +20,6 @@ const shoppingCartItemSchema = new Schema({
 });
 
 
+module.exports = {
+    Schema: shoppingCartItemSchema
+};
