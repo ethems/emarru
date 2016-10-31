@@ -1,15 +1,12 @@
 'use strict';
 
-// import the moongoose helper utilities
 var utils = require('../../utils');
 var should = require('should');
-// import our User mongoose model
 var User = require('../../../gateway/models/user');
 
 describe('Users: models', function() {
     describe('#Create', function() {
         it('should create a new User', function(done) {
-            // Create a User object to pass to User.create()
             var u = {
                 name: {
                     firstName: "Mesut",
@@ -19,18 +16,14 @@ describe('Users: models', function() {
                 passwordHash: "123456"
             };
             User.create(u, function(err, createdUser) {
-                // Confirm that that an error does not exist
                 should.not.exist(err);
-                // verify that the returned user is what we expect
                 createdUser.email.should.equal('mesut@gmail.com');
                 createdUser.passwordHash.should.equal('123456');
-                // Call done to tell mocha that we are done with this test
                 done();
             });
         });
 
         it('should create a new User with lowercase email if email is capitilized', function(done) {
-            // Create a User object to pass to User.create()
             var u = {
                 name: {
                     firstName: "Mesut",
@@ -57,9 +50,7 @@ describe('Users: models', function() {
                 password: "123456"
             };
             User.create(u, function(err, createdUser) {
-
                 should.exist(err);
-
                 done();
             });
         });
@@ -74,15 +65,12 @@ describe('Users: models', function() {
                 password: ""
             };
             User.create(u, function(err, createdUser) {
-
                 should.exist(err);
-
                 done();
             });
         });
 
         it('should throw exception  if there is noncomplete address ', function(done) {
-            // Create a User object to pass to User.create()
             var a={
               streetLine1:"xxxxxx"
             }
@@ -96,15 +84,12 @@ describe('Users: models', function() {
                 passwordHash: "123456"
             };
             User.create(u, function(err, createdUser) {
-
                 should.exist(err);
-
                 done();
             });
         });
 
         it('should create a new user with address ', function(done) {
-            // Create a User object to pass to User.create()
             var a={
               streetLine1:"st1",
               city:"c1",
@@ -150,6 +135,32 @@ describe('Users: models', function() {
               foundUser.save(function(err) {
                   should.not.exist(err);
                   foundUser.name.middleName.should.equal('Middlename');
+                  done();
+              });
+          });
+        });
+        it('should update a existed User address', function(done) {
+          User.findOne({
+              'email': 'enduser@enduser.com'
+          }, function(err, foundUser) {
+              foundUser.name.middleName = 'middleName';
+              foundUser.addresses=[{
+                streetLine1:"st1",
+                city:"c1",
+                zip:"z1"
+              },{
+                streetLine1:"st1",
+                city:"c1",
+                zip:"z1"
+              },{
+                streetLine1:"st1",
+                city:"c1",
+                zip:"z1"
+              }];
+              foundUser.save(function(err) {
+                  should.not.exist(err);
+                  foundUser.name.middleName.should.equal('Middlename');
+                  foundUser.addresses.length.should.equal(3);
                   done();
               });
           });

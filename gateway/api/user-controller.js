@@ -7,7 +7,7 @@ const requireAuth = passport.authenticate('jwt', {session: false});
 
 const userController = apiRouter => {
 
-    apiRouter.put('/user', requireAuth, function(req, res) {
+    apiRouter.put('/users', requireAuth, function(req, res) {
 
         req.checkBody('name.firstName', 'Invalid first name').len(1, 50);
         req.checkBody('name.lastName', 'Invalid last name').len(1, 50);

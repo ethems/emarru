@@ -9,7 +9,7 @@ var request = request('http://localhost:3000');
 describe('User Controller', function() {
     describe('PUT/user', function() {
         it('should get 401 unauthentication code if there is no token', function(done) {
-            request.put('/api/user').set('Accept', 'application/json').expect(401).end(function(err, res) {
+            request.put('/api/users').set('Accept', 'application/json').expect(401).end(function(err, res) {
                 should.not.exist(err);
                 done();
             });
@@ -28,7 +28,7 @@ describe('User Controller', function() {
                     },
                     addresses:[]
                 });
-                request.put('/api/user').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
+                request.put('/api/users').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
                     should.not.exist(err);
                     res.body.user.email.should.equal('enduser@enduser.com');
                     res.body.user.name.firstName.should.equal('Enduser_updated');
@@ -56,7 +56,7 @@ describe('User Controller', function() {
                       }
                     ]
                 });
-                request.put('/api/user').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(500).end(function(err, res) {
+                request.put('/api/users').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(500).end(function(err, res) {
                     should.not.exist(err);
                     done();
                 });
@@ -83,7 +83,7 @@ describe('User Controller', function() {
                       }
                     ]
                 });
-                request.put('/api/user').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
+                request.put('/api/users').set('authorization', res.body.token).set('Accept', 'application/json').send(updatedU).expect(200).end(function(err, res) {
                     should.not.exist(err);
                     res.body.user.email.should.equal('enduser@enduser.com');
                     res.body.user.addresses[0].streetLine1.should.equal('xx');
