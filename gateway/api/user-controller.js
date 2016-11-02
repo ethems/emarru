@@ -8,7 +8,7 @@ const requireAuth = passport.authenticate('jwt', {session: false});
 const userController = apiRouter => {
 
     apiRouter.put('/users', requireAuth, function(req, res) {
-
+        ///TODO USER address check!!!!!!!!
         req.checkBody('name.firstName', 'Invalid first name').len(1, 50);
         req.checkBody('name.lastName', 'Invalid last name').len(1, 50);
         req.checkBody('name.middleName', 'Invalid middle name').len(0, 50);
@@ -22,7 +22,7 @@ const userController = apiRouter => {
         User.findById(req.user.id, function(err, foundUser) {
             if (err) {
                 logger.error('user search error : ' + err.message);
-                res.status(500).json({error: "Opppssss !!! There is a problem when searching user!"});
+                res.status(500).json({error: "User search error"});
             }
             foundUser.name.firstName = req.body.name.firstName;
             foundUser.name.lastName = req.body.name.lastName;
@@ -33,7 +33,7 @@ const userController = apiRouter => {
             foundUser.save(function(err, updatedUser) {
                 if (err) {
                     logger.error('user updating error : ' + err.message);
-                    res.status(500).json({error: "Opppssss !!! There is a problem when updating user!"});
+                    res.status(500).json({error: "User update error"});
                 }
                 logger.info('user updated  : ' + updatedUser.email);
                 res.json({user: updatedUser});

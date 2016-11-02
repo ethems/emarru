@@ -15,6 +15,16 @@ const shoppingCartSchema = new Schema({
     ]
 });
 
+shoppingCartSchema.statics.FindByUserId=function(userId,fn){
+  this.findOne({
+      'user': userId,
+      'shoppingCartItems':{
+        $elemMatch:{createdDate: {$gte: moment().startOf('day')}}
+      }
+  }).populate({path:'shoppingCartItems.product',populate:{path:'priceHistory',model:'Price',match:{active:true}}})
+  .exec(fn);
+};
+
 const ShoppingCartModel = mongoose.model('ShoppingCart', shoppingCartSchema);
 
 module.exports = ShoppingCartModel;
