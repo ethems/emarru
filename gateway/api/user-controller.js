@@ -16,13 +16,14 @@ const userController = apiRouter => {
 
         const errors = req.validationErrors();
         if (errors) {
-            res.status(400).json({error: "Validation error !"});
+          logger.error('User validation error');
+          return res.sendStatus(400);
         }
 
         User.findById(req.user.id, function(err, foundUser) {
             if (err) {
                 logger.error('user search error : ' + err.message);
-                res.status(500).json({error: "User search error"});
+                return res.status(500).json({error: "User search error"});
             }
             foundUser.name.firstName = req.body.name.firstName;
             foundUser.name.lastName = req.body.name.lastName;
@@ -33,10 +34,10 @@ const userController = apiRouter => {
             foundUser.save(function(err, updatedUser) {
                 if (err) {
                     logger.error('user updating error : ' + err.message);
-                    res.status(500).json({error: "User update error"});
+                    return res.status(500).json({error: "User update error"});
                 }
                 logger.info('user updated  : ' + updatedUser.email);
-                res.json({user: updatedUser});
+                return res.json({user: updatedUser});
             });
 
         });

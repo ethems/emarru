@@ -26,7 +26,7 @@ const AuthenticationController = (apiRouter, config) => {
 
         var errors = req.validationErrors();
         if (errors) {
-            res.status(400).json({error: "Validation error !"})
+            return res.status(400).json({error: "Validation error !"})
         }
         var newUser = {
             name: {
@@ -40,24 +40,24 @@ const AuthenticationController = (apiRouter, config) => {
         User.findOneByEmail(req.body.email, function(err, existingUser) {
             if (err) {
                 logger.error('error : ' + err.message);
-                res.status(500).json({error: "Opppssss !!! There is an internal server error!"});
+                return res.status(500).json({error: "Opppssss !!! There is an internal server error!"});
             }
             if (existingUser) {
-                res.status(409).json({error: "existed user !"});
+                return res.status(409).json({error: "existed user !"});
             } else {
                 User.hashPassword(req.body.password, function(err, passwordHash) {
                     if (err) {
                         logger.error('password hash error : ' + err.message);
-                        res.status(500).json({error: "Opppssss !!! There is a problem when hashing password!"});
+                        return res.status(500).json({error: "Opppssss !!! There is a problem when hashing password!"});
                     }
                     newUser.passwordHash = passwordHash;
                     User.create(newUser, function(err, createdUser) {
                         if (err) {
                             logger.error('user create error : ' + err.message);
-                            res.status(500).json({error: "Opppssss !!! There is a problem when creating a new user!"});
+                            return res.status(500).json({error: "Opppssss !!! There is a problem when creating a new user!"});
                         }
                         logger.info('new user created  : ' + createdUser.email);
-                        res.json({
+                        return res.json({
                             user: createdUser,
                             token: createToken(createdUser, config)
                         });
@@ -70,7 +70,7 @@ const AuthenticationController = (apiRouter, config) => {
 
     });
     apiRouter.post('/signin', requireSignin, function(req, res) {
-        res.json({
+        return res.json({
             user: req.user,
             token: createToken(req.user, config)
         });
