@@ -1,6 +1,5 @@
 'use strict';
 
-const express = require('express');
 var request = require('supertest');
 var should = require('should');
 var Product = require('../../../gateway/models/product');
@@ -32,11 +31,11 @@ describe('ShoppingCart Controller', function() {
                         }, function(err, updatedProduct) {
                             kavunID = updatedProduct.id;
                             done();
-                        })
-                    })
-                })
-            })
-        })
+                        });
+                    });
+                });
+            });
+        });
     });
     after(function() {});
     describe('POST', function() {
@@ -65,7 +64,7 @@ describe('ShoppingCart Controller', function() {
             };
             var p = {
                 productId: kavunID
-            }
+            };
             request.post('/api/signin').send(u).end(function(err, res) {
                 request.post('/api/shopping_cart').set('authorization', res.body.token).set('Accept', 'application/json').send(p).expect(200).end(function(err, res) {
                     should.not.exist(err);
@@ -80,7 +79,7 @@ describe('ShoppingCart Controller', function() {
             };
             var p = {
                 productId: kavunID
-            }
+            };
 
             request.post('/api/signin').send(u).end(function(err, res) {
                 var token = res.body.token;
@@ -126,13 +125,13 @@ describe('ShoppingCart Controller', function() {
                     shoppingCartItems[0].quantity = 3;
                     var pL={
                       shoppingCartItems:shoppingCartItems
-                    }
+                    };
                     request.put('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(pL).expect(200).end(function(err, res) {
                         done();
-                    })
+                    });
                 });
             });
         });
 
     });
-})
+});

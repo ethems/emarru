@@ -1,6 +1,5 @@
 'use strict';
 
-const express = require('express');
 var request = require('supertest');
 var should = require('should');
 
@@ -94,4 +93,4 @@ describe('User Controller', function() {
         });
 
     });
-})
+});

@@ -1,10 +1,8 @@
 'use strict';
 
-const express = require('express');
 var request = require('supertest');
 var should = require('should');
 var Product = require('../../../gateway/models/product');
-var Price = require('../../../gateway/models/price');
 var request = request('http://localhost:3000');
 
 describe('Product Controller', function() {
@@ -20,11 +18,11 @@ describe('Product Controller', function() {
               Product.updatePrice(createdProduct.id,{price:30.35,startDate:new Date(2016,1,1)},function(err,updatedProduct){
                 mantarID=updatedProduct.id;
                 done();
-              })
-            })
-          })
-        })
-      })
+              });
+            });
+          });
+        });
+      });
     });
     after(function(){
 
@@ -55,7 +53,7 @@ describe('Product Controller', function() {
                 should.not.exist(err);
                 res.body.products.length.should.greaterThan(1);
                 var mantar=res.body.products.filter(function(obj){
-                  return obj.name=="Mantar"
+                  return obj.name==="Mantar";
                 })[0];
                 mantar.priceHistory.length.should.equal(1);
                 mantar.priceHistory[0].price.should.equal(30.35);
@@ -74,4 +72,4 @@ describe('Product Controller', function() {
 
     });
 
-})
+});

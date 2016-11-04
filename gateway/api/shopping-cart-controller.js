@@ -1,8 +1,8 @@
-const moment = require('moment');
+"use strict";
+
 const passport = require('passport');
 const _ = require('lodash');
 const logger = require("../lib/logger");
-const User = require('../models/user');
 const ShoppingCart = require('../models/shopping-cart');
 
 const requireAuth = passport.authenticate('jwt', {session: false});
@@ -27,7 +27,7 @@ const shoppingCartController = apiRouter => {
         }, function(err, shoppingCart) {
             if (shoppingCart) {
                 if (!_.find(shoppingCart.shoppingCartItems, function(item) {
-                    return item.product == req.body.productId
+                    return item.product.equals(req.body.productId);
                 })) {
                     //Add new item to existed shoppingCart
                     shoppingCart.shoppingCartItems.push(shoppingCartItem);
@@ -75,7 +75,7 @@ const shoppingCartController = apiRouter => {
                     return res.status(500).json({error: "Shopping cart update error"});
                 }
                 return res.sendStatus(200);
-            })
+            });
         });
     });
     apiRouter.get('/shopping_cart', requireAuth, function(req, res) {
@@ -87,9 +87,9 @@ const shoppingCartController = apiRouter => {
             }
             return res.json({shoppingCart: foundShoppingCart});
         });
-    })
-}
+    });
+};
 
 module.exports = {
     default: shoppingCartController
-}
+};

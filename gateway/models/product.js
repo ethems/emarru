@@ -1,10 +1,18 @@
-const validator = require('validator');
+"use strict";
+
 const mongoose = require('mongoose');
-const moment = require('moment');
 const _ = require('lodash');
 
 const Schema = mongoose.Schema;
 const Price = require('./price');
+const capitalize = (val)=> {
+    if (!val) {
+        return "";
+    }
+    return val.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
 
 const productSchema = new Schema({
     name: {
@@ -30,6 +38,8 @@ const productSchema = new Schema({
     modifiedDate: Date
 });
 
+
+
 productSchema.pre('save', function(next) {
     const product = this;
     product.modifiedDate = Date.now();
@@ -42,13 +52,13 @@ productSchema.statics.findByName=function(productName,fn){
 productSchema.statics.getWithAllPricesSince=function(productId,date,fn){
   this.findById(productId).populate({path:'priceHistory',match:{
     $or:[{startDate:{"$gte":date}},{active:true}]
-  }}).exec(fn)
+  }}).exec(fn);
 };
 productSchema.statics.getWithLastNPrices=function(productId,limit,fn){
   if(!isNaN(limit)){
     limit=1;
   }
-  this.findById(productId).populate({path:'priceHistory',options:{limit:+limit,sort: {startDate: -1}}}).exec(fn)
+  this.findById(productId).populate({path:'priceHistory',options:{limit:+limit,sort: {startDate: -1}}}).exec(fn);
 };
 
 
@@ -82,8 +92,8 @@ productSchema.statics.addPriceHistory = function(productId, priceId, fn) {
 };
 productSchema.statics.getWithActivePrice=function(productId, fn){
   //Return selected product with active price
-  this.findById(productId).populate({path:'priceHistory',match:{active:true}}).exec(fn)
-}
+  this.findById(productId).populate({path:'priceHistory',match:{active:true}}).exec(fn);
+};
 productSchema.statics.updatePrice = function(productId, newPrice, fn) {
     const that = this;
     this.expireActivePrice(productId, function(err,doc, next) {
@@ -99,26 +109,19 @@ productSchema.statics.updatePrice = function(productId, newPrice, fn) {
                     return next(err);
                 }
                 that.getWithActivePrice(productId,fn);
-            })
-        })
+            });
+        });
 
     });
 
-}
+};
 productSchema.statics.getAllWithActivePrice = function(fn){
   //Return all products with active price
   this.find().populate({path:'priceHistory',match:{active:true}}).exec(fn);
-}
+};
 
 
-function capitalize(val) {
-    if (!val) {
-        return "";
-    }
-    return val.replace(/\w\S*/g, function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
+
 
 const ProductModel = mongoose.model('Product', productSchema);
 

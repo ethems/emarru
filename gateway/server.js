@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require('express');
 const morgan = require('morgan');
 const appRouter = require('./lib/app-router');
@@ -23,7 +25,7 @@ const config = require('./config')(env, serverPort);
 server.use(morgan('combined',{ "stream": logger.stream }));
 
 // DB SETUP
-const mongoose = require('./lib/db')(config);
+require('./lib/db')(config);
 
 
 

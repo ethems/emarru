@@ -1,5 +1,6 @@
+"use strict";
+
 const moment = require('moment');
-const validator = require('validator');
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;

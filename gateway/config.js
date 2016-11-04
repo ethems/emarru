@@ -1,3 +1,5 @@
+"use strict";
+
 const path = require('path');
 const fs = require('fs');
 
@@ -16,8 +18,8 @@ module.exports = (env, serverPort) => {
 
     runtimeConfig.serverPort = serverPort || configJson['Application.ServerPort'] || 3000;
     runtimeConfig.siteRoot = `/${configJson['Application.SiteRoot']}`;
-    runtimeConfig.dbUri= configJson['DB'][env];
-    runtimeConfig.secret=configJson['Secret'];
+    runtimeConfig.dbUri= configJson.DB[env];
+    runtimeConfig.secret=configJson.Secret;
     return runtimeConfig;
 
-}
+};

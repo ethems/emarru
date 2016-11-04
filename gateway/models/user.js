@@ -1,12 +1,17 @@
-const moment = require('moment');
-const validator = require('validator');
+"use strict";
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const addressSchema = require('./address').Schema;
 const  BCRYPT_COST = 12;
-
+const capitalize = (val)=> {
+    if (!val) {
+        return "";
+    }
+    return val.charAt(0).toUpperCase() + val.substring(1).toLowerCase();
+};
 
 const userSchema = new Schema({
     name: {
@@ -52,12 +57,7 @@ const userSchema = new Schema({
     modifiedDate: Date
 });
 
-function capitalize(val) {
-    if (!val) {
-        return "";
-    }
-    return val.charAt(0).toUpperCase() + val.substring(1).toLowerCase();
-}
+
 
 userSchema.statics.hashPassword = function(passwordRaw, fn) {
     // encrypt the password
@@ -71,7 +71,7 @@ userSchema.statics.findOneByEmail = function(email, fn) {
     this.findOne({
         email: email.toLowerCase()
     }, fn);
-}
+};
 
 userSchema.pre('save', function(next) {
     const user = this;

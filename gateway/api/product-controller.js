@@ -1,3 +1,5 @@
+"use strict";
+
 const moment = require('moment');
 const passport = require('passport');
 
@@ -56,7 +58,7 @@ const productController = apiRouter => {
         if (errors || !req.params.id) {
             logger.error('Price validation error');
             return res.status(400).json({error: "Validation error !"});
-        };
+        }
         const newPrice = {
             price: req.body.price
         };
@@ -66,7 +68,7 @@ const productController = apiRouter => {
                 return res.status(500).json({error: "Price update error"});
             }
             logger.info('price updated  for ' + updatedProduct.name + ' new price is ' + req.body.price);
-            return res.json({product: updatedProduct})
+            return res.json({product: updatedProduct});
         });
     });
 
@@ -101,7 +103,7 @@ const productController = apiRouter => {
                 return res.status(500).json({error: "Products find error"});
             }
             return res.json({products: foundProducts});
-        })
+        });
     });
 
     apiRouter.get('/products/:id', function(req, res) {
@@ -114,11 +116,11 @@ const productController = apiRouter => {
                 return res.status(500).json({error: "Product find error"});
             }
             return res.json({product: foundProduct});
-        })
-    })
+        });
+    });
 
-}
+};
 
 module.exports = {
     default: productController
-}
+};

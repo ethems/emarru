@@ -1,4 +1,5 @@
-const moment = require('moment');
+"use strict";
+
 const User = require('../models/user');
 const passport = require('passport');
 const jwt = require('jwt-simple');
@@ -26,7 +27,7 @@ const AuthenticationController = (apiRouter, config) => {
 
         var errors = req.validationErrors();
         if (errors) {
-            return res.status(400).json({error: "Validation error !"})
+            return res.status(400).json({error: "Validation error !"});
         }
         var newUser = {
             name: {
@@ -76,8 +77,8 @@ const AuthenticationController = (apiRouter, config) => {
         });
     });
 
-}
+};
 
 module.exports = {
     default: AuthenticationController
-}
+};

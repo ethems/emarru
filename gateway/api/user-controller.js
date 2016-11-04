@@ -1,4 +1,5 @@
-const moment = require('moment');
+"use strict";
+
 const passport = require('passport');
 
 const logger = require("../lib/logger");
@@ -43,8 +44,8 @@ const userController = apiRouter => {
         });
     });
 
-}
+};
 
 module.exports = {
     default: userController
-}
+};
