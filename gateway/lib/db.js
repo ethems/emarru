@@ -1,3 +1,5 @@
+"use strict";
+
 const Mongoose= require('mongoose');
 var logger = require("./logger");
 
@@ -13,9 +15,9 @@ module.exports = config => {
   process.on('SIGINT',function(){
     Mongoose.connection.close(function(){
       logger.info('Mongoose disconnected through app terminal');
-      process.exit(0)
+      process.exit(0);
     });
   });
 
   return Mongoose;
-}
+};
