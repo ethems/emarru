@@ -1,12 +1,9 @@
 'use strict';
 const moment = require('moment');
-var utils = require('../../utils');
 var should = require('should');
 var User = require('../../../gateway/models/user');
 var Product = require('../../../gateway/models/product');
-var Price = require('../../../gateway/models/price');
 var ShoppingCart = require('../../../gateway/models/shopping-cart');
-var ShoppingCartItem = require('../../../gateway/models/shopping-cart-item');
 
 
 describe('Shopping cart', function() {
@@ -87,13 +84,13 @@ describe('Shopping cart', function() {
           .exec(function(err,foundShoppingCart){
             should.not.exist(err);
             should.not.exist(foundShoppingCart);
-              done();
+            done();
           });
         });
       });
 
     });
-    
+
     describe('#Delete', function(){
       it('should Delete Shopping cart', function(done){
         User.findOne({'email': 'enduser@enduser.com'}, function(err, foundUser){

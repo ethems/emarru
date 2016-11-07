@@ -1,6 +1,5 @@
 'use strict';
 
-var utils = require('../../utils');
 var should = require('should');
 var User = require('../../../gateway/models/user');
 
@@ -19,6 +18,7 @@ describe('Users: models', function() {
                 should.not.exist(err);
                 createdUser.email.should.equal('mesut@gmail.com');
                 createdUser.passwordHash.should.equal('123456');
+                createdUser.addresses.length.should.equal(0);
                 done();
             });
         });
@@ -73,7 +73,7 @@ describe('Users: models', function() {
         it('should throw exception  if there is noncomplete address ', function(done) {
             var a={
               streetLine1:"xxxxxx"
-            }
+            };
             var u = {
                 name: {
                     firstName: "Mesut",
@@ -94,7 +94,7 @@ describe('Users: models', function() {
               streetLine1:"st1",
               city:"c1",
               zip:"z1"
-            }
+            };
             var u = {
                 name: {
                     firstName: "Mesut",
