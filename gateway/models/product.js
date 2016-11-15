@@ -50,29 +50,21 @@ productSchema.statics.findByName=function(productName,fn){
 };
 
 productSchema.statics.getWithAllPricesSince=function(productId,date,fn){
+  // Get History since specific date with active one
   this.findById(productId).populate({path:'priceHistory',match:{
     $or:[{startDate:{"$gte":date}},{active:true}]
   }}).exec(fn);
 };
+
 productSchema.statics.getWithLastNPrices=function(productId,limit,fn){
   if(!isNaN(limit)){
     limit=1;
   }
-  this.findById(productId).populate({path:'priceHistory',options:{limit:+limit,sort: {startDate: -1}}}).exec(fn);
+  this.findById(productId).populate({path:'priceHistory',options:{limit:limit,sort: {startDate: -1}}}).exec(fn);
 };
 
-
-
 productSchema.statics.expireActivePrice = function(productId, fn) {
-    Price.update({
-        productId: productId,
-        active: true
-    }, {
-        $set: {
-            active: false,
-            endDate: Date.now()
-        }
-    }, fn);
+    Price.expirePrice(productId,fn);
 };
 productSchema.statics.addNewPrice = function(productId, newPrice, fn) {
     var price = new Price(_.extend({

@@ -31,6 +31,17 @@ const priceSchema = new Schema({
     }
 });
 
+priceSchema.statics.expirePrice= function(productId,fn){
+  this.update({
+      productId: productId,
+      active: true
+  }, {
+      $set: {
+          active: false,
+          endDate: Date.now()
+      }
+  }, fn);
+};
 
 const PriceModel = mongoose.model('Price', priceSchema);
 
