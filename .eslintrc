@@ -1,0 +1,58 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "plugins": [
+    "react",
+    "import",
+    "flowtype"
+  ],
+  "globals": {
+    "module": true,
+    "require": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "no-debugger": 0,
+    "no-console": 0,
+    "no-multi-spaces": 1,
+    "import/newline-after-import": 1,
+    "array-callback-return": 1,
+    "flowtype/define-flow-type":1,
+    "flowtype/require-valid-file-annotation": 1,
+    "flowtype/use-flow-type": 1,
+    "comma-dangle": [
+      "error"
+    ],
+    "eqeqeq": 2,
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": {
+          "resolve": {
+            "extensions": [
+              "",
+              ".js",
+              ".jsx"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

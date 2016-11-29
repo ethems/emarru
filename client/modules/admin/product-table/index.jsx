@@ -4,7 +4,7 @@ import TableHeader from './table-header';
 class ProductTable extends Component {
   render() {
     return(
-      <TableHeader  type="Meyve ve Sebze"/>
+      <TableHeader type="Meyve ve Sebze"/>
     )
   }
 }

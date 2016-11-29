@@ -4,7 +4,7 @@ var request = require('supertest');
 var should = require('should');
 var Product = require('../../../gateway/models/product');
 
-var request = request('http://localhost:3000');
+var requestApi = request('http://localhost:3000');
 
 describe('ShoppingCart Controller', function() {
     var kavunID = 0;
@@ -16,15 +16,15 @@ describe('ShoppingCart Controller', function() {
             Product.updatePrice(createdProduct.id, {
                 price: 30.34,
                 startDate: new Date(1999, 1, 1)
-            }, function(err, updatedProduct) {
+            }, function() {
                 Product.updatePrice(createdProduct.id, {
                     price: 30.30,
                     startDate: new Date(2001, 1, 1)
-                }, function(err, updatedProduct) {
+                }, function() {
                     Product.updatePrice(createdProduct.id, {
                         price: 30.28,
                         startDate: new Date(2015, 1, 1)
-                    }, function(err, updatedProduct) {
+                    }, function() {
                         Product.updatePrice(createdProduct.id, {
                             price: 30.35,
                             startDate: new Date(2016, 1, 1)
@@ -40,7 +40,7 @@ describe('ShoppingCart Controller', function() {
     after(function() {});
     describe('POST', function() {
         it('should get 401 if there is no autorization', function(done) {
-            request.post('/api/shopping_cart').set('Accept', 'application/json').expect(401).end(function(err, res) {
+            requestApi.post('/api/shopping_cart').set('Accept', 'application/json').expect(401).end(function(err) {
                 should.not.exist(err);
                 done();
             });
@@ -50,8 +50,8 @@ describe('ShoppingCart Controller', function() {
                 email: "enduser@enduser.com",
                 password: "enduser"
             };
-            request.post('/api/signin').send(u).end(function(err, res) {
-                request.post('/api/shopping_cart').set('authorization', res.body.token).set('Accept', 'application/json').expect(400).end(function(err, res) {
+            requestApi.post('/api/signin').send(u).end(function(err, res) {
+                requestApi.post('/api/shopping_cart').set('authorization', res.body.token).set('Accept', 'application/json').expect(400).end(function(err) {
                     should.not.exist(err);
                     done();
                 });
@@ -65,8 +65,8 @@ describe('ShoppingCart Controller', function() {
             var p = {
                 productId: kavunID
             };
-            request.post('/api/signin').send(u).end(function(err, res) {
-                request.post('/api/shopping_cart').set('authorization', res.body.token).set('Accept', 'application/json').send(p).expect(200).end(function(err, res) {
+            requestApi.post('/api/signin').send(u).end(function(err, res) {
+                requestApi.post('/api/shopping_cart').set('authorization', res.body.token).set('Accept', 'application/json').send(p).expect(200).end(function(err) {
                     should.not.exist(err);
                     done();
                 });
@@ -81,11 +81,11 @@ describe('ShoppingCart Controller', function() {
                 productId: kavunID
             };
 
-            request.post('/api/signin').send(u).end(function(err, res) {
+            requestApi.post('/api/signin').send(u).end(function(err, res) {
                 var token = res.body.token;
-                request.post('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(p).expect(409).end(function(err, res) {
+                requestApi.post('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(p).expect(409).end(function(err) {
                     should.not.exist(err);
-                    request.post('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(p).expect(409).end(function(err, res) {
+                    requestApi.post('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(p).expect(409).end(function(err) {
                         should.not.exist(err);
                         done();
                     });
@@ -99,9 +99,9 @@ describe('ShoppingCart Controller', function() {
                 email: "admin@admin.com",
                 password: "admin"
             };
-            request.post('/api/signin').send(u).end(function(err, res) {
+            requestApi.post('/api/signin').send(u).end(function(err, res) {
                 var token = res.body.token;
-                request.get('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').expect(200).end(function(err, res) {
+                requestApi.get('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').expect(200).end(function(err, res) {
                     should.not.exist(err);
                     res.body.shoppingCart.shoppingCartItems[0].product.name.should.equal('Kavun');
                     res.body.shoppingCart.shoppingCartItems[0].quantity.should.equal(1);
@@ -117,16 +117,16 @@ describe('ShoppingCart Controller', function() {
                 email: "admin@admin.com",
                 password: "admin"
             };
-            request.post('/api/signin').send(u).end(function(err, res) {
+            requestApi.post('/api/signin').send(u).end(function(err, res) {
                 var token = res.body.token;
-                request.get('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').expect(200).end(function(err, res) {
+                requestApi.get('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').expect(200).end(function(err, res) {
                     should.not.exist(err);
                     let shoppingCartItems = res.body.shoppingCart.shoppingCartItems;
                     shoppingCartItems[0].quantity = 3;
                     var pL={
                       shoppingCartItems:shoppingCartItems
                     };
-                    request.put('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(pL).expect(200).end(function(err, res) {
+                    requestApi.put('/api/shopping_cart').set('authorization', token).set('Accept', 'application/json').send(pL).expect(200).end(function() {
                         done();
                     });
                 });
