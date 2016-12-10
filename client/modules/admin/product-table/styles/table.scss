@@ -1,0 +1,38 @@
+.table-container {
+    padding: 0 14px 24px 42px;
+
+
+    .list-header {
+        display: flex;
+        justify-content: flex-start;
+        height: 46px;
+        border-bottom: 1px solid #F5F5F5;
+        color: rgba(black, 0.5);
+    }
+}
+
+.table-container .table-list-container {
+    .table-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.table-container .list-header {
+    .product-name {
+        width: 45%;
+        line-height: 46px;
+        vertical-align: middle;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .price-type {
+        width: 20%;
+        line-height: 46px;
+        vertical-align: middle;
+        cursor: pointer;
+        font-weight: bold;
+    }
+}

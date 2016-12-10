@@ -1,56 +1,18 @@
 .table-header-container {
-    padding: 24px 14px 0px 24px;
+    padding: 24px 14px 14px 24px;
+    border-bottom: 1px solid #EFEFEF;
 
     .table-header {
         display: flex;
         justify-content: space-between;
-        height: 64px;
-    }
-
-    .list-header {
-        display: flex;
-        justify-content: flex-start;
-        height: 56px;
-        border-bottom: 1px solid #F5F5F5;
-        color: rgba(black, 0.5);
+        height: 20px;
     }
 }
 
 .table-header-container .table-header {
     .header-type {
-        line-height: 64px;
+        line-height: 20px;
         vertical-align: middle;
-    }
-
-    .actions {
-        line-height: 64px;
-        vertical-align: middle;
-        display: flex;
-        justify-content: space-around;
-        width: 100px;
-
-        .action {
-            cursor: pointer;
-            color: #2196F3;
-        }
-    }
-}
-
-.table-header-container .list-header {
-    .product-name {
-        width: 45%;
-        line-height: 56px;
-        vertical-align: middle;
-        padding: 0 0 0 42px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .price-type {
-        width: 20%;
-        line-height: 56px;
-        vertical-align: middle;
-        cursor: pointer;
         font-weight: bold;
     }
 }

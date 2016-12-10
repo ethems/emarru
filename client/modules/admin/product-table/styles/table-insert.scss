@@ -1,0 +1,17 @@
+
+
+.table-insert-container{
+  padding: 14px 0px 14px 42px;
+  border-bottom: 1px solid #efefef;
+  display: flex;
+
+  .input-box{
+    width: 40%;
+  }
+}
+
+.table-insert-container .input-box{
+  input{
+    width: 100%;
+  }
+}
